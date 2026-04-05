@@ -1,0 +1,39 @@
+---
+description: Run all shell/terminal commands through WSL from Windows
+alwaysApply: true
+---
+
+# WSL terminal
+
+This repo is edited on **Windows**, but **build, forge, npm, and git in the terminal must run inside WSL**.
+
+## For the agent (Shell tool)
+
+- Prefix invocations with **`wsl`** so they execute in the default Linux distro (e.g. Ubuntu).
+- Use **`bash -lc`** for a login shell so `PATH`, `nvm`, Foundry, etc. load correctly.
+
+**Workspace root in WSL** (map `C:\` → `/mnt/c/`):
+
+`/mnt/c/Users/HP/OneDrive/Desktop/GDG/capstone/land-registry`
+
+## Pattern
+
+```text
+wsl bash -lc 'cd /mnt/c/Users/HP/OneDrive/Desktop/GDG/capstone/land-registry/<subdir> && <command>'
+```
+
+- Quote so **Windows** does not strip single quotes meant for **bash**.
+- Prefer **single quotes** around the whole `bash -lc` argument when the inner command uses double quotes, or escape carefully.
+
+**Examples:**
+
+```text
+wsl bash -lc 'cd /mnt/c/Users/HP/OneDrive/Desktop/GDG/capstone/land-registry/contracts && forge build'
+wsl bash -lc 'cd /mnt/c/Users/HP/OneDrive/Desktop/GDG/capstone/land-registry/frontend && npm install'
+```
+
+## Do not
+
+- Run `forge`, `npm`, `node`, or Linux-only tooling directly in **PowerShell** unless the user explicitly asks for a Windows-native path.
+
+If the user’s WSL username or distro differs, they can adjust the path or use `wsl ~` after copying the project into the Linux home directory.
